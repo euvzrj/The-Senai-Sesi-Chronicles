@@ -1,6 +1,7 @@
 using System;
 class Persona
 {
+    public string nome;
     public int agilidade;
     public int forca;
     public int vigor;
@@ -10,6 +11,9 @@ class Persona
 
     public void criaficha()
     {
+        Console.WriteLine("\nQual e o seu nome?");
+        this.nome = Console.ReadLine();
+
         Console.WriteLine("\nQuantos pontos voce quer colocar em AGILIDADE?");
         this.agilidade = int.Parse(Console.ReadLine());
 
@@ -66,6 +70,7 @@ class Persona
     public void verficha()
     {
         Console.WriteLine("\n========= FICHA DO PERSONAGEM =========");
+        Console.WriteLine("Nome:" + nome);
         Console.WriteLine("Forca: " + forca);
         Console.WriteLine("Dano: " + dano);
         Console.WriteLine("-=-=-=-=-");
@@ -83,7 +88,7 @@ public class HelloWorld
     public static int dice(int faces)
     {
         Random rolagem = new Random();
-        return rolagem.Next(1, faces);
+        return rolagem.Next(1, faces + 1);
     }
 
     public static void texto(string texto)
@@ -91,20 +96,27 @@ public class HelloWorld
         Console.WriteLine(texto);
     }
 
-    public static void testecontra(int atribtestplayer, int atribtestenemy)
+    public static bool testecontra(int atribtestum, int atribtestdois)
     {
-        testeplayer = dice(20 + atribtestplayer);
-        testeenemy = dice(20 + atribtestenemy);
+        int testeperum = dice(20) + atribtestum;
+        Console.WriteLine("Seu teste:" + testeperum);
+
+        int testeperdois = dice(20) + atribtestdois;
+        Console.WriteLine("Teste do oponente:" + testeperdois);
+
+        bool acerto = (testeperum > testeperdois);
+        return acerto;
     }
-    public static void batalha(int playervida, int enemyvida, int playeragi, int enemyagi, int playerdano, int enemydano)
+
+    public static void batalha(int playervida, int enemyvida, int playeragi, int enemyagi, int playerdano, int enemydano, string enemynome, int enemyca, int playerforca)
     {
         //Rolando iniciativa
-        Console.WriteLine("\nUma batalha foi iniciada!\n role iniciativa para continuar");
-        int minhaini = dice(20 + playeragi);
-        int alemaoini = dice(20 + enemyagi);
+        Console.WriteLine("\nUma batalha foi iniciada!\nRole iniciativa para continuar");
+        int minhaini = dice(20) + playeragi;
+        int alemaoini = dice(20) + enemyagi;
 
         Console.WriteLine("Sua iniciativa: " + minhaini);
-        Console.WriteLine("Iniciativa do oponente" + alemaoini);
+        Console.WriteLine("Iniciativa do oponente: " + alemaoini);
 
         //Caso minha iniciativa for maior
         if (minhaini > alemaoini)
@@ -117,32 +129,40 @@ public class HelloWorld
                 Console.WriteLine("SUA VIDA/PODER: " + playervida + "/" + playerdano);
                 Console.WriteLine("VIDA INIMIGO: " + enemyvida);
                 Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-");
-                Console.WriteLine("O que você vai fazer? \n1. Atacar \n2. Bloquear \n3. Esquivar");
-                int choose = Console.ReadLine();
+                Console.WriteLine("O que voce vai fazer? \n1. Atacar \n2. Bloquear \n3. Esquivar");
+                string choose = Console.ReadLine();
 
-                if (choose == 1)//atacar
+                switch (choose)
                 {
-                    if (AcertouAtaque())
-                    {
-                        eneh = Damage(eneh, power);
-                        Console.WriteLine("Você desferiu um golpe com sua espada e atingiu o oponente!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Você errou o ataque!");
-                    }
-                }
-                else if (choose == 2)//bloquear
-                {
-                    Console.WriteLine("Você bloqueia o ataque do oponente!");
-                }
-                else if (choose == 3)//esquivar
-                {
+                    case "1":
+                        Console.WriteLine("Voce tentou atacar o inimigo!");
+                        int resulteste = dice(20) + playeragi;
+                        Console.WriteLine($"Seu teste (1d20+AGILIDADE) deu {resulteste}. O inimigo tem Defesa {enemyca}.");
 
-                }
-                else
-                {
-                    Console.WriteLine("Comando inválido!");
+                        if (resulteste > enemyca)
+                        {
+
+                            enemyvida -= playerdano;
+                            Console.WriteLine($"Voce acertou o ataque e causou {playerdano} de dano no oponente!! A vida de {enemynome} cai para {enemyvida}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("O inimigo defendeu!");
+                        }
+
+                        break;
+
+                    case "2":
+                        Console.WriteLine("Voce bloqueou o inimigo! O dano foi reduzido pela metade.");
+                        break;
+
+                    case "3":
+                        Console.WriteLine("Voce esquivou do inimigo! Nao sofreu nenhum dano.");
+                        break;
+
+                    default:
+                        Console.WriteLine("Opcao invalida.");
+                        break;
                 }
             }
 
@@ -172,7 +192,8 @@ public class HelloWorld
         Persona player = new Persona();
         Persona segura = new Persona();
 
-        //Status do segurança babaca
+        //Buildando o segurança babaca
+        segura.nome = "Segurança Babaca";
         segura.agilidade = 0;
         segura.forca = 3;
         segura.vigor = 3;
@@ -185,6 +206,6 @@ public class HelloWorld
         texto(fichaexplica);
         player.criaficha();
         player.verficha();
-        batalha(player.vida, segura.vida, player.agilidade, segura.agilidade, player.dano, segura.dano);
+        batalha(player.vida, segura.vida, player.agilidade, segura.agilidade, player.dano, segura.dano, segura.nome, segura.ca, player.forca);
     }
-}
+}               
