@@ -1,4 +1,5 @@
 using System;
+
 class Persona
 {
     public string nome;
@@ -8,11 +9,51 @@ class Persona
     public int vida;
     public int ca;
     public int dano;
+    string classe;
+    string escolhaclasse;
 
     public void criaficha()
     {
         Console.WriteLine("\nQual e o seu nome?");
         this.nome = Console.ReadLine();
+
+        Console.WriteLine("\nEscolha uma classe \n1 - Mago \n2- Cavaleiro \n3- Arqueiro");
+        this.escolhaclasse = Console.ReadLine();
+
+        while(classe != "Mago" || classe != "Cavaleiro" || classe != "Arqueiro"){
+            if (escolhaclasse == "1")
+            {
+                Console.WriteLine("Voce escolheu: Mago");
+                Console.WriteLine("Descricao: Mestre das magias.");
+                Console.WriteLine("Atributos: Ataque mágico alto, defesa baixa.");
+                this.classe = "Mago";
+                break;
+            }
+            else if(escolhaclasse == "2")
+            {
+                Console.WriteLine("Voce escolheu: Cavaleiro");
+                Console.WriteLine("Descricao: Guerreiro forte com armadura.");
+                Console.WriteLine("Atributos: Ataque físico medio, defesa alta.");
+                this.classe = "Cavaleiro";
+                break;
+            }
+            else if(escolhaclasse == "3")
+            {
+                Console.WriteLine("Você escolheu: Arqueiro");
+                Console.WriteLine("Descricao: Atirador agil a distancia.");
+                Console.WriteLine("Atributos: Ataque rapido, mobilidade alta.");
+                this.classe = "Arqueiro";
+                break;
+            }
+            else
+            {
+                while (escolhaclasse != "1" && escolhaclasse != "2" && escolhaclasse != "3")
+                {
+                    Console.WriteLine("Escolha invalida. Tente novamente.");
+                    this.escolhaclasse = Console.ReadLine();
+                }
+            }
+        }
 
         Console.WriteLine("\nQuantos pontos voce quer colocar em AGILIDADE?");
         this.agilidade = int.Parse(Console.ReadLine());
@@ -70,15 +111,16 @@ class Persona
     public void verficha()
     {
         Console.WriteLine("\n========= FICHA DO PERSONAGEM =========");
-        Console.WriteLine("Nome:" + nome);
-        Console.WriteLine("Forca: " + forca);
-        Console.WriteLine("Dano: " + dano);
+        Console.WriteLine("Nome:" + this.nome);
+        Console.WriteLine("Classe: "+ this.classe);
+        Console.WriteLine("Forca: " + this.forca);
+        Console.WriteLine("Dano: " + this.dano);
         Console.WriteLine("-=-=-=-=-");
-        Console.WriteLine("Agilidade: " + agilidade);
-        Console.WriteLine("CA (Defesa): " + ca);
+        Console.WriteLine("Agilidade: " + this.agilidade);
+        Console.WriteLine("CA (Defesa): " + this.ca);
         Console.WriteLine("-=-=-=-=-");
-        Console.WriteLine("Vigor: " + vigor);
-        Console.WriteLine("Vida: " + vida + "/" + vida);
+        Console.WriteLine("Vigor: " + this.vigor);
+        Console.WriteLine("Vida: " + this.vida + "/" + this.vida);
         Console.WriteLine("========================================");
     }
 }
@@ -108,7 +150,7 @@ public class HelloWorld
         return acerto;
     }
 
-    public static void batalha(int playervida, int enemyvida, int playeragi, int enemyagi, int playerdano, int enemydano, string enemynome, int enemyca, int playerforca)
+    public static void batalha(int playervida, int enemyvida, int playeragi, int enemyagi, int playerdano, int enemydano, string enemynome, int enemyca, int playerforca, int playerca)
     {
         //Rolando iniciativa
         Console.WriteLine("\nUma batalha foi iniciada!\nRole iniciativa para continuar");
@@ -123,55 +165,95 @@ public class HelloWorld
         {
             Console.WriteLine("Voce comeca atacando!");
 
-            while (playervida > 0 && enemyvida > 0)
+            while (playervida >= 0 && enemyvida >= 0)
             {
                 Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-");
                 Console.WriteLine("SUA VIDA/PODER: " + playervida + "/" + playerdano);
                 Console.WriteLine("VIDA INIMIGO: " + enemyvida);
                 Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-");
+
+
+                //Seu turno
                 Console.WriteLine("O que voce vai fazer? \n1. Atacar \n2. Bloquear \n3. Esquivar");
+
                 string choose = Console.ReadLine();
-
-                switch (choose)
+                
+                if (choose == "1")
                 {
-                    case "1":
-                        Console.WriteLine("Voce tentou atacar o inimigo!");
-                        int resulteste = dice(20) + playeragi;
-                        Console.WriteLine($"Seu teste (1d20+AGILIDADE) deu {resulteste}. O inimigo tem Defesa {enemyca}.");
+                    Console.WriteLine("Voce tentou atacar o inimigo!");
+                    int resulteste = dice(20) + playeragi;
+                    Console.WriteLine($"Seu teste (1d20+AGILIDADE) deu {resulteste}. O inimigo tem Defesa {enemyca}.");
 
-                        if (resulteste > enemyca)
+                    if (resulteste > enemyca)
+                    {
+
+                        enemyvida -= playerdano;
+                        Console.WriteLine($"Voce acertou o ataque e causou {playerdano} de dano no oponente!! A vida de {enemynome} cai para {enemyvida}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("O inimigo defendeu!");
+                    }
+                }
+                else if(choose == "2") 
+                {
+                    Console.WriteLine("Voce bloqueou o inimigo! O dano foi reduzido pela metade.");
+                     break;
+                }
+                else if(choose == "3") 
+                {
+                    Console.WriteLine("Voce esquivou do inimigo! O dano foi completamente evitado.");
+                    break;
+                }
+                while ()
+                {
+                    else
+                    {
+                        Console.WriteLine("!!ERRO!! Digite uma opcao valida");
+                        break;
+                    }
+                }
+
+            
+
+                //Turno inimigo
+                int escolhaenemy = dice(4);
+                switch (escolhaenemy)
+                {
+                    case 1:
+                        Console.WriteLine("O inimigo tentou te atacar!");
+                        int resultestee = dice(20) + enemyagi;
+                        Console.WriteLine($"Seu teste (1d20+AGILIDADE) deu {resultestee}. O inimigo tem Defesa {playerca}.");
+    
+                        if (resultestee > playerca)
                         {
-
-                            enemyvida -= playerdano;
-                            Console.WriteLine($"Voce acertou o ataque e causou {playerdano} de dano no oponente!! A vida de {enemynome} cai para {enemyvida}");
+    
+                                playervida -= enemydano;
+                                Console.WriteLine($"Voce acertou o ataque e causou {enemydano} de dano no oponente!! Sua vida cai para {playervida}");
                         }
                         else
                         {
-                            Console.WriteLine("O inimigo defendeu!");
+                            Console.WriteLine("Você defendeu!");
                         }
-
-                        break;
-
-                    case "2":
-                        Console.WriteLine("Voce bloqueou o inimigo! O dano foi reduzido pela metade.");
-                        break;
-
-                    case "3":
-                        Console.WriteLine("Voce esquivou do inimigo! Nao sofreu nenhum dano.");
-                        break;
-
+                    case 2:
+                        Console.WriteLine("O inimigo bloqueou");
+    
+                    case 3:
+                        Console.WriteLine("O inimigo esquivou");
+    
+    
                     default:
-                        Console.WriteLine("Opcao invalida.");
-                        break;
+                        Console.WriteLine("O inimigo esquivou");
+
+
                 }
             }
-
         }
-
+    
         //Caso iniciativa do inimigo for maior
         else
         {
-            while (playervida > 0 && enemyvida > 0)
+            while (playervida >= 0 && enemyvida >= 0)
             {
                 Console.WriteLine("O oponente comeca atacando!");
                 Console.Read();
@@ -182,7 +264,7 @@ public class HelloWorld
     public static void Main(string[] args)
     {
         //Textos
-        string inicio = "-=-=-=-=-= THE SENAI SESI CHRONICLES =-=-=-=-=-\nCrie seu personagem para comecar.\n";
+        string titulo = "-=-=-=-=-= THE SENAI SESI CHRONICLES =-=-=-=-=-\nCrie seu personagem para comecar.\n";
         string fichaexplica = "A ficha sera feita da seguinte maneira...\n-> Voce tem 4 pontos " +
             "para distribuir entre seus atributos:\n- Forca (o quanto voce bate)\n- Agilidade " +
             "(o quao rapido voce e)\n- Vigor (o quanto voce e resistente).\nNo final, a soma da " +
@@ -202,10 +284,10 @@ public class HelloWorld
         segura.dano = 5;
 
         //Main
-        texto(inicio);
+        texto(titulo);
         texto(fichaexplica);
         player.criaficha();
         player.verficha();
-        batalha(player.vida, segura.vida, player.agilidade, segura.agilidade, player.dano, segura.dano, segura.nome, segura.ca, player.forca);
+        batalha(player.vida, segura.vida, player.agilidade, segura.agilidade, player.dano, segura.dano, segura.nome, segura.ca, player.forca, player.ca);
     }
 }               
