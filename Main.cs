@@ -84,8 +84,8 @@ class Persona
 
     public void VerFicha()
     {
-        Console.WriteLine("-=-=-=-=-=JOGADOR REGISTRADO=-=-=-=-=-");
-        Console.WriteLine($"Ficha criada!\nNome: {this.Nome}\nClasse: {this.Classe}\n" +
+  
+        Console.WriteLine($"-=-=-=-=-=FICHA DE PERSONAGEM=-=-=-=-=-\nNome: {this.Nome}\nClasse: {this.Classe}\n" +
          $"Força: {this.Forca}\nAgilidade: {this.Agi}\nVigor: {this.Vigor}");
     }
 
