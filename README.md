@@ -1,2 +1,2 @@
 # The-Senai-Sesi-Chronicles
-(06/07/25)Tô aprendendo C# no SENAI, e como trabalho final do trimeste o professor passou esse desafio de fzr um RPGzinho baseado em RPG de mesa.
+Tô aprendendo C# no SENAI, e como uma das avaliações do trimeste o professor passou esse desafio de fazer um RPG em C#.
